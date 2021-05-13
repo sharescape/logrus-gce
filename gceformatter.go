@@ -76,11 +76,11 @@ func getSkipLevel(level logrus.Level) (int, error) {
 	runtime.Callers(3, stackSkipsCallers)
 	for i, pc := range stackSkipsCallers {
 		f := runtime.FuncForPC(pc)
-		if !strings.Contains(f.Name(), "github.com/sirupsen/logrus") {
-			//continue
-			stackSkips[level] = i + 1
-			return i + 1, nil
+		if strings.Contains(f.Name(), "github.com/sirupsen/logrus") {
+			continue
 		}
+		stackSkips[level] = i + 1
+		return i + 1, nil
 	}
 	return 0, ErrSkipNotFound
 }
